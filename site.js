@@ -1,395 +1,349 @@
 (() => {
+const body = document.body;
+const toggle = document.querySelector('.theme-toggle');
 
-  const body = document.body;
-  const toggle = document.querySelector('.theme-toggle');
+// ==============================
+// MODO CLARO E MODO ESCURO
+// ==============================
 
-  // ==============================
-  // MODO CLARO E MODO ESCURO
-  // ==============================
+const saved = localStorage.getItem('site-theme');
 
-  const saved = localStorage.getItem('site-theme');
+const prefersLight =
+window.matchMedia &&
+window.matchMedia('(prefers-color-scheme: light)').matches;
 
-  const prefersLight =
-    window.matchMedia &&
-    window.matchMedia('(prefers-color-scheme: light)').matches;
+if (saved === 'light' || (!saved && prefersLight)) {
+body.classList.add('light-mode');
+}
 
-  if (saved === 'light' || (!saved && prefersLight)) {
-    body.classList.add('light-mode');
+const isEnglish = document.documentElement.lang
+.toLowerCase()
+.startsWith('en');
+
+function updateThemeButton() {
+if (!toggle) return;
+
+```
+const light = body.classList.contains('light-mode');
+
+if (isEnglish) {
+  toggle.innerHTML = light
+    ? '🌙 <span>Dark mode</span>'
+    : '☀️ <span>Light mode</span>';
+
+  toggle.setAttribute(
+    'aria-label',
+    light ? 'Enable dark mode' : 'Enable light mode'
+  );
+} else {
+  toggle.innerHTML = light
+    ? '🌙 <span>Modo escuro</span>'
+    : '☀️ <span>Modo claro</span>';
+
+  toggle.setAttribute(
+    'aria-label',
+    light ? 'Ativar modo escuro' : 'Ativar modo claro'
+  );
+}
+```
+
+}
+
+updateThemeButton();
+
+toggle?.addEventListener('click', () => {
+body.classList.toggle('light-mode');
+
+```
+localStorage.setItem(
+  'site-theme',
+  body.classList.contains('light-mode')
+    ? 'light'
+    : 'dark'
+);
+
+updateThemeButton();
+```
+
+});
+
+// ==============================
+// SUBMENU DE CRÉDITOS
+// ==============================
+
+const creditSections = document.querySelectorAll('.creditos-secao');
+
+const creditLinks = document.querySelectorAll(
+'.submenu a[href*="professores"], .submenu a[href*="desenvolvedores"]'
+);
+
+const creditMainLink = document.querySelector(
+'.dropdown > a[href="creditos.html"]'
+);
+
+// Só executa se esta página possuir as seções de créditos
+if (creditSections.length) {
+
+```
+function showCreditSection(sectionId) {
+
+  creditSections.forEach(section => {
+    section.classList.remove('creditos-ativo');
+    section.style.display = 'none';
+  });
+
+  const selected = document.getElementById(sectionId);
+
+  if (selected) {
+    selected.style.display = 'block';
+    selected.classList.add('creditos-ativo');
+
+    selected.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
+    });
   }
-
-  const isEnglish = document.documentElement.lang
-    .toLowerCase()
-    .startsWith('en');
+}
 
 
-  function updateThemeButton() {
+// Orientadores / Desenvolvedores
+creditLinks.forEach(link => {
 
-    if (!toggle) return;
+  link.addEventListener('click', event => {
 
-    const light = body.classList.contains('light-mode');
+    const href = link.getAttribute('href');
 
-    if (isEnglish) {
+    if (!href) return;
 
-      toggle.innerHTML = light
-        ? '🌙 <span>Dark mode</span>'
-        : '☀️ <span>Light mode</span>';
+    const sectionId = href.split('#')[1];
 
-      toggle.setAttribute(
-        'aria-label',
-        light
-          ? 'Enable dark mode'
-          : 'Enable light mode'
-      );
+    if (!sectionId) return;
 
-    } else {
+    event.preventDefault();
 
-      toggle.innerHTML = light
-        ? '🌙 <span>Modo escuro</span>'
-        : '☀️ <span>Modo claro</span>';
+    showCreditSection(sectionId);
 
-      toggle.setAttribute(
-        'aria-label',
-        light
-          ? 'Ativar modo escuro'
-          : 'Ativar modo claro'
-      );
-
-    }
-
-  }
-
-
-  updateThemeButton();
-
-
-  toggle?.addEventListener('click', () => {
-
-    body.classList.toggle('light-mode');
-
-    localStorage.setItem(
-      'site-theme',
-      body.classList.contains('light-mode')
-        ? 'light'
-        : 'dark'
+    history.pushState(
+      null,
+      '',
+      '#' + sectionId
     );
-
-    updateThemeButton();
-
   });
 
-
-  // ==============================
-  // FILTRO DA PÁGINA DE CRÉDITOS
-  // ==============================
-
-  const filtros =
-    document.querySelectorAll('.filtro-creditos');
-
-  const professores =
-    document.getElementById('professores');
-
-  const desenvolvedores =
-    document.getElementById('desenvolvedores');
-
-  const titulo =
-    document.getElementById('secao-titulo');
+});
 
 
-  function mostrarTudo() {
+// ==============================
+// CLIQUE EM "CRÉDITOS"
+// MOSTRA TUDO NOVAMENTE
+// ==============================
 
-    if (titulo) {
-      titulo.style.display = '';
-    }
+creditMainLink?.addEventListener('click', event => {
 
-    if (professores) {
-      professores.style.display = '';
-    }
+  const href = creditMainLink.getAttribute('href');
 
-    if (desenvolvedores) {
-      desenvolvedores.style.display = '';
-    }
+  if (href !== 'creditos.html') return;
 
-  }
+  event.preventDefault();
 
-
-  function mostrarProfessores() {
-
-    if (titulo) {
-      titulo.style.display = 'none';
-    }
-
-    if (professores) {
-      professores.style.display = '';
-    }
-
-    if (desenvolvedores) {
-      desenvolvedores.style.display = 'none';
-    }
-
-    professores?.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start'
-    });
-
-  }
-
-
-  function mostrarDesenvolvedores() {
-
-    if (titulo) {
-      titulo.style.display = 'none';
-    }
-
-    if (professores) {
-      professores.style.display = 'none';
-    }
-
-    if (desenvolvedores) {
-      desenvolvedores.style.display = '';
-    }
-
-    desenvolvedores?.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start'
-    });
-
-  }
-
-
-  filtros.forEach(link => {
-
-    link.addEventListener('click', event => {
-
-      event.preventDefault();
-
-      const destino = link.getAttribute('href');
-
-      if (destino === '#professores') {
-
-        mostrarProfessores();
-
-      }
-
-      else if (destino === '#desenvolvedores') {
-
-        mostrarDesenvolvedores();
-
-      }
-
-    });
-
+  creditSections.forEach(section => {
+    section.style.display = 'block';
+    section.classList.remove('creditos-ativo');
   });
 
-
-  // ==============================
-  // BOTÃO "CRÉDITOS"
-  // MOSTRA A PÁGINA COMPLETA
-  // ==============================
-
-  const linkCreditos =
-    document.getElementById('link-creditos');
-
-  linkCreditos?.addEventListener('click', event => {
-
-    /*
-      Se já estiver em creditos.html,
-      impede recarregar a página e
-      simplesmente mostra tudo.
-    */
-
-    if (
-      window.location.pathname.endsWith('creditos.html') ||
-      window.location.pathname.endsWith('/')
-    ) {
-
-      event.preventDefault();
-
-      mostrarTudo();
-
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-      });
-
-    }
-
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
   });
 
+  history.pushState(
+    null,
+    '',
+    'creditos.html'
+  );
+});
 
-  // ==============================
-  // CARROSSEL DE IMAGENS
-  // ==============================
 
-  const slides = Array.from(
-    document.querySelectorAll('.carousel-slide')
+// ==============================
+// ABRIR DIRETAMENTE PELA ÂNCORA
+// ==============================
+
+const hash = window.location.hash;
+
+if (
+  hash === '#professores' ||
+  hash === '#desenvolvedores'
+) {
+
+  const sectionId = hash.substring(1);
+
+  showCreditSection(sectionId);
+
+} else {
+
+  // Página normal: mostra todas as seções
+  creditSections.forEach(section => {
+    section.style.display = 'block';
+  });
+
+}
+```
+
+}
+
+// ==============================
+// CARROSSEL DE IMAGENS
+// ==============================
+
+const slides = Array.from(
+document.querySelectorAll('.carousel-slide')
+);
+
+const carousel = document.querySelector('.carousel-container');
+const dotsWrap = document.querySelector('.carousel-dots');
+
+// Se a página não tiver carrossel,
+// encerra apenas a parte do carrossel.
+if (!slides.length || !carousel) return;
+
+let index = slides.findIndex(slide =>
+slide.classList.contains('active')
+);
+
+if (index < 0) {
+index = 0;
+slides[0].classList.add('active');
+}
+
+const dots = [];
+let timer = null;
+
+// ==============================
+// CRIAÇÃO DAS BOLINHAS
+// ==============================
+
+if (dotsWrap) {
+
+```
+slides.forEach((_, i) => {
+
+  const button = document.createElement('button');
+
+  button.className = 'carousel-dot';
+  button.type = 'button';
+
+  button.setAttribute(
+    'aria-label',
+    isEnglish
+      ? `Go to slide ${i + 1}`
+      : `Ir para o slide ${i + 1}`
   );
 
-  const carousel =
-    document.querySelector('.carousel-container');
-
-  const dotsWrap =
-    document.querySelector('.carousel-dots');
-
-
-  // Se a página não tiver carrossel,
-  // encerra apenas essa parte.
-  if (!slides.length || !carousel) return;
-
-
-  let index = slides.findIndex(slide =>
-    slide.classList.contains('active')
-  );
-
-
-  if (index < 0) {
-
-    index = 0;
-    slides[0].classList.add('active');
-
-  }
-
-
-  const dots = [];
-  let timer = null;
-
-
-  // ==============================
-  // CRIAÇÃO DAS BOLINHAS
-  // ==============================
-
-  if (dotsWrap) {
-
-    slides.forEach((_, i) => {
-
-      const button =
-        document.createElement('button');
-
-      button.className =
-        'carousel-dot';
-
-      button.type = 'button';
-
-      button.setAttribute(
-        'aria-label',
-        isEnglish
-          ? `Go to slide ${i + 1}`
-          : `Ir para o slide ${i + 1}`
-      );
-
-
-      button.addEventListener('click', () => {
-
-        showSlide(i);
-        restartAutoPlay();
-
-      });
-
-
-      dotsWrap.appendChild(button);
-      dots.push(button);
-
-    });
-
-  }
-
-
-  // ==============================
-  // MOSTRAR UMA IMAGEM
-  // ==============================
-
-  function showSlide(newIndex) {
-
-    slides[index].classList.remove('active');
-
-    dots[index]?.classList.remove('active');
-
-
-    index =
-      (newIndex + slides.length) %
-      slides.length;
-
-
-    slides[index].classList.add('active');
-
-    dots[index]?.classList.add('active');
-
-  }
-
-
-  // ==============================
-  // BOTÕES ANTERIOR E PRÓXIMO
-  // ==============================
-
-  window.changeSlide = function(direction) {
-
-    showSlide(index + direction);
-
+  button.addEventListener('click', () => {
+    showSlide(i);
     restartAutoPlay();
+  });
 
-  };
+  dotsWrap.appendChild(button);
+  dots.push(button);
 
+});
+```
 
-  // ==============================
-  // TROCA AUTOMÁTICA
-  // ==============================
+}
 
-  function startAutoPlay() {
+// ==============================
+// MOSTRAR UMA IMAGEM
+// ==============================
 
-    if (timer !== null) return;
+function showSlide(newIndex) {
 
+```
+slides[index].classList.remove('active');
+dots[index]?.classList.remove('active');
 
-    timer = setInterval(() => {
+index =
+  (newIndex + slides.length) %
+  slides.length;
 
-      showSlide(index + 1);
+slides[index].classList.add('active');
+dots[index]?.classList.add('active');
+```
 
-    }, 4500);
+}
 
-  }
+// ==============================
+// BOTÕES ANTERIOR E PRÓXIMO
+// ==============================
 
+window.changeSlide = function(direction) {
 
-  function stopAutoPlay() {
+```
+showSlide(index + direction);
 
-    if (timer !== null) {
+restartAutoPlay();
+```
 
-      clearInterval(timer);
+};
 
-      timer = null;
+// ==============================
+// TROCA AUTOMÁTICA
+// ==============================
 
-    }
+function startAutoPlay() {
 
-  }
+```
+if (timer !== null) return;
 
+timer = setInterval(() => {
+  showSlide(index + 1);
+}, 4500);
+```
 
-  function restartAutoPlay() {
+}
 
-    stopAutoPlay();
-    startAutoPlay();
+function stopAutoPlay() {
 
-  }
+```
+if (timer !== null) {
 
+  clearInterval(timer);
+  timer = null;
 
-  // ==============================
-  // PAUSAR AO PASSAR O MOUSE
-  // ==============================
+}
+```
 
-  carousel.addEventListener(
-    'mouseenter',
-    stopAutoPlay
-  );
+}
 
-  carousel.addEventListener(
-    'mouseleave',
-    startAutoPlay
-  );
+function restartAutoPlay() {
 
+```
+stopAutoPlay();
+startAutoPlay();
+```
 
-  // ==============================
-  // INICIALIZAÇÃO
-  // ==============================
+}
 
-  dots[index]?.classList.add('active');
+// ==============================
+// PAUSAR AO PASSAR O MOUSE
+// ==============================
 
-  startAutoPlay();
+carousel.addEventListener(
+'mouseenter',
+stopAutoPlay
+);
 
+carousel.addEventListener(
+'mouseleave',
+startAutoPlay
+);
+
+// ==============================
+// INICIALIZAÇÃO
+// ==============================
+
+dots[index]?.classList.add('active');
+
+startAutoPlay();
 
 })();
