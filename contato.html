@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+
+<html lang="pt-br">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Formas inovadoras de Terapia - Contato</title>
+<link rel="icon" href="ty.png" type="image/png">
+<link href="style.css" rel="stylesheet"/>
+</head>
+<body id="topo">
+<div id="header">
+<h1>TERAPIAS ALTERNATIVAS</h1>
+<ul id="nav">
+<li><a href="index.html">Home</a></li>
+<li><a href="sobre.html">Sobre</a></li>
+<!-- O item Terapias agora engloba o sub-menu -->
+<li class="dropdown">
+<a href="terapia.html">Terapias</a>
+<ul class="submenu">
+<li><a href="musicaterapia.html">Musicoterapia</a></li>
+<li><a href="pnl.html">PNL</a></li>
+<li><a href="radiestesia.html">Radiestesia</a></li>
+</ul>
+</li>
+<li><a href="bibliografia.html">Bibliografia</a></li>
+<li><a href="creditos.html">Créditos</a></li>
+<li><a href="contato.html">Contato</a></li>
+<li class="theme-item"><button class="theme-toggle" type="button">☀️ Modo claro</button></li><li class="language-item"><a class="lang-switch" href="contato_en.html" title="Abrir versão em inglês">🇧🇷 → 🇺🇸 EN</a></li></ul>
+</div>
+<div id="conteudo">
+<div class="artigo">
+<h2>Fale Conosco</h2>
+<p>Use o formulário para enviar uma avaliação, sugestão ou comentário sobre o projeto. Os campos marcados com * são obrigatórios.</p>
+<form id="formulario" method="post">
+<label for="nome">Nome: *</label>
+<input id="nome" name="nome" pattern="[A-Za-zÀ-ÿ\s]{3,}" placeholder="Digite seu nome completo" required="" title="Digite um nome válido usando apenas letras (mínimo de 3 caracteres)." type="text"/>
+<label for="email">E-mail: *</label>
+<input id="email" name="email" placeholder="exemplo@gmail.com" required="" type="email"/>
+<label for="telefone">Telefone (DDD + número): *</label>
+<input id="telefone" name="telefone" pattern="[0-9]{10,11}" placeholder="Ex.: 11999998888" required="" title="Digite apenas números, contendo o DDD e o telefone (10 ou 11 dígitos)." type="tel"/>
+<label for="avaliacao">Avalie nosso site (0–5): *</label>
+<select id="avaliacao" name="avaliacao" required="">
+<option disabled="" selected="" value="">Selecione uma nota</option>
+<option value="0">0</option><option value="1">1</option><option value="2">2</option>
+<option value="3">3</option><option value="4">4</option><option value="5">5</option>
+</select>
+<label for="comentario">Deixe seu comentário: *</label>
+<textarea class="travada" id="comentario" maxlength="600" minlength="10" name="comentario" placeholder="Escreva sua mensagem aqui..." rows="6" title="Seu comentário deve ter pelo menos 10 caracteres."></textarea>
+<div class="botoes">
+<button type="submit">Enviar Mensagem</button>
+<button type="reset">Apagar Campos</button>
+</div>
+</form>
+</div>
+</div>
+<div id="rodape">
+<p>ETEC DE HORTOLÂNDIA 2026 - © Todos os direitos reservados</p>
+<a aria-label="Voltar ao topo" href="#topo" id="ancora"><svg fill="#1f1f1f" height="24px" viewbox="0 -960 960 960" width="24px" xmlns="http://www.w3.org/2000/svg"><path d="M440-240v-368L296-464l-56-56 240-240 240 240-56 56-144-144v368h-80Z"></path></svg></a>
+</div>
+<script src="site.js"></script></body>
+</html>
