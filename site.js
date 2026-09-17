@@ -1,49 +1,65 @@
 (() => {
+// =========================================================
+// MODO CLARO / MODO ESCURO
+// =========================================================
+
 const body = document.body;
 const toggle = document.querySelector('.theme-toggle');
 
-// ==============================
-// MODO CLARO E MODO ESCURO
-// ==============================
-
-const saved = localStorage.getItem('site-theme');
+const savedTheme = localStorage.getItem('site-theme');
 
 const prefersLight =
 window.matchMedia &&
 window.matchMedia('(prefers-color-scheme: light)').matches;
 
-if (saved === 'light' || (!saved && prefersLight)) {
+// Aplica o tema salvo ou o tema preferido pelo sistema
+if (
+savedTheme === 'light' ||
+(!savedTheme && prefersLight)
+) {
 body.classList.add('light-mode');
 }
 
-const isEnglish = document.documentElement.lang
+const isEnglish =
+document.documentElement.lang
 .toLowerCase()
 .startsWith('en');
 
+// Atualiza o texto do botão
 function updateThemeButton() {
-if (!toggle) return;
 
 ```
-const light = body.classList.contains('light-mode');
+if (!toggle) return;
+
+const lightMode =
+  body.classList.contains('light-mode');
 
 if (isEnglish) {
-  toggle.innerHTML = light
+
+  toggle.innerHTML = lightMode
     ? '🌙 <span>Dark mode</span>'
     : '☀️ <span>Light mode</span>';
 
   toggle.setAttribute(
     'aria-label',
-    light ? 'Enable dark mode' : 'Enable light mode'
+    lightMode
+      ? 'Enable dark mode'
+      : 'Enable light mode'
   );
+
 } else {
-  toggle.innerHTML = light
+
+  toggle.innerHTML = lightMode
     ? '🌙 <span>Modo escuro</span>'
     : '☀️ <span>Modo claro</span>';
 
   toggle.setAttribute(
     'aria-label',
-    light ? 'Ativar modo escuro' : 'Ativar modo claro'
+    lightMode
+      ? 'Ativar modo escuro'
+      : 'Ativar modo claro'
   );
+
 }
 ```
 
@@ -51,299 +67,472 @@ if (isEnglish) {
 
 updateThemeButton();
 
-toggle?.addEventListener('click', () => {
-body.classList.toggle('light-mode');
+// Clique no botão de tema
+if (toggle) {
 
 ```
-localStorage.setItem(
-  'site-theme',
-  body.classList.contains('light-mode')
-    ? 'light'
-    : 'dark'
-);
+toggle.addEventListener('click', () => {
 
-updateThemeButton();
-```
+  body.classList.toggle('light-mode');
+
+  const lightMode =
+    body.classList.contains('light-mode');
+
+  localStorage.setItem(
+    'site-theme',
+    lightMode ? 'light' : 'dark'
+  );
+
+  updateThemeButton();
 
 });
+```
 
-// ==============================
+}
+
+// =========================================================
 // SUBMENU DE CRÉDITOS
-// ==============================
+// =========================================================
 
-const creditSections = document.querySelectorAll('.creditos-secao');
+const creditSections =
+document.querySelectorAll('.creditos-secao');
 
-const creditLinks = document.querySelectorAll(
-'.submenu a[href*="professores"], .submenu a[href*="desenvolvedores"]'
-);
-
-const creditMainLink = document.querySelector(
-'.dropdown > a[href="creditos.html"]'
-);
-
-// Só executa se esta página possuir as seções de créditos
-if (creditSections.length) {
+// Só executa esta parte nas páginas que possuem
+// as seções especiais dos créditos.
+if (creditSections.length > 0) {
 
 ```
-function showCreditSection(sectionId) {
+const advisorLinks =
+  document.querySelectorAll(
+    '.submenu a[href*="#professores"]'
+  );
+
+const developerLinks =
+  document.querySelectorAll(
+    '.submenu a[href*="#desenvolvedores"]'
+  );
+
+const creditMainLink =
+  document.querySelector(
+    '.dropdown > a[href="creditos.html"], ' +
+    '.dropdown > a[href="creditos_en.html"]'
+  );
+
+
+// ---------------------------------------------------------
+// Mostra somente uma seção
+// ---------------------------------------------------------
+
+function showOnlySection(sectionId) {
 
   creditSections.forEach(section => {
-    section.classList.remove('creditos-ativo');
+
     section.style.display = 'none';
+    section.classList.remove('creditos-ativo');
+
   });
 
-  const selected = document.getElementById(sectionId);
 
-  if (selected) {
-    selected.style.display = 'block';
-    selected.classList.add('creditos-ativo');
+  const selectedSection =
+    document.getElementById(sectionId);
 
-    selected.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start'
-    });
+
+  if (selectedSection) {
+
+    selectedSection.style.display = 'block';
+
+    selectedSection.classList.add(
+      'creditos-ativo'
+    );
+
+    // Pequeno atraso para garantir que a seção
+    // já esteja visível antes da rolagem.
+    setTimeout(() => {
+
+      selectedSection.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+
+    }, 50);
+
   }
+
 }
 
 
-// Orientadores / Desenvolvedores
-creditLinks.forEach(link => {
+// ---------------------------------------------------------
+// Mostra todas as seções
+// ---------------------------------------------------------
+
+function showAllCreditSections() {
+
+  creditSections.forEach(section => {
+
+    section.style.display = 'block';
+
+    section.classList.remove(
+      'creditos-ativo'
+    );
+
+  });
+
+}
+
+
+// ---------------------------------------------------------
+// ORIENTADORES
+// ---------------------------------------------------------
+
+advisorLinks.forEach(link => {
 
   link.addEventListener('click', event => {
 
-    const href = link.getAttribute('href');
-
-    if (!href) return;
-
-    const sectionId = href.split('#')[1];
-
-    if (!sectionId) return;
-
     event.preventDefault();
 
-    showCreditSection(sectionId);
+    showOnlySection('professores');
 
     history.pushState(
       null,
       '',
-      '#' + sectionId
+      link.getAttribute('href')
     );
+
   });
 
 });
 
 
-// ==============================
-// CLIQUE EM "CRÉDITOS"
-// MOSTRA TUDO NOVAMENTE
-// ==============================
+// ---------------------------------------------------------
+// DESENVOLVEDORES
+// ---------------------------------------------------------
 
-creditMainLink?.addEventListener('click', event => {
+developerLinks.forEach(link => {
 
-  const href = creditMainLink.getAttribute('href');
+  link.addEventListener('click', event => {
 
-  if (href !== 'creditos.html') return;
+    event.preventDefault();
 
-  event.preventDefault();
+    showOnlySection('desenvolvedores');
 
-  creditSections.forEach(section => {
-    section.style.display = 'block';
-    section.classList.remove('creditos-ativo');
+    history.pushState(
+      null,
+      '',
+      link.getAttribute('href')
+    );
+
   });
 
-  window.scrollTo({
-    top: 0,
-    behavior: 'smooth'
-  });
+});
 
-  history.pushState(
-    null,
-    '',
-    'creditos.html'
+
+// ---------------------------------------------------------
+// BOTÃO PRINCIPAL "CRÉDITOS"
+// ---------------------------------------------------------
+
+if (creditMainLink) {
+
+  creditMainLink.addEventListener(
+    'click',
+    event => {
+
+      event.preventDefault();
+
+      showAllCreditSections();
+
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+
+      history.pushState(
+        null,
+        '',
+        creditMainLink.getAttribute('href')
+      );
+
+    }
   );
-});
-
-
-// ==============================
-// ABRIR DIRETAMENTE PELA ÂNCORA
-// ==============================
-
-const hash = window.location.hash;
-
-if (
-  hash === '#professores' ||
-  hash === '#desenvolvedores'
-) {
-
-  const sectionId = hash.substring(1);
-
-  showCreditSection(sectionId);
-
-} else {
-
-  // Página normal: mostra todas as seções
-  creditSections.forEach(section => {
-    section.style.display = 'block';
-  });
 
 }
+
+
+// ---------------------------------------------------------
+// ABRIR PÁGINA COM #PROFESSORES OU #DESENVOLVEDORES
+// ---------------------------------------------------------
+
+function checkCreditHash() {
+
+  const hash =
+    window.location.hash;
+
+  if (hash === '#professores') {
+
+    showOnlySection('professores');
+
+  } else if (
+    hash === '#desenvolvedores'
+  ) {
+
+    showOnlySection(
+      'desenvolvedores'
+    );
+
+  } else {
+
+    showAllCreditSections();
+
+  }
+
+}
+
+
+checkCreditHash();
+
+
+// Se o usuário navegar pelo histórico
+// do navegador.
+window.addEventListener(
+  'popstate',
+  checkCreditHash
+);
+
+window.addEventListener(
+  'hashchange',
+  checkCreditHash
+);
 ```
 
 }
 
-// ==============================
+// =========================================================
 // CARROSSEL DE IMAGENS
-// ==============================
+// =========================================================
 
-const slides = Array.from(
-document.querySelectorAll('.carousel-slide')
+const slides =
+Array.from(
+document.querySelectorAll(
+'.carousel-slide'
+)
 );
 
-const carousel = document.querySelector('.carousel-container');
-const dotsWrap = document.querySelector('.carousel-dots');
-
-// Se a página não tiver carrossel,
-// encerra apenas a parte do carrossel.
-if (!slides.length || !carousel) return;
-
-let index = slides.findIndex(slide =>
-slide.classList.contains('active')
+const carousel =
+document.querySelector(
+'.carousel-container'
 );
 
+const dotsWrap =
+document.querySelector(
+'.carousel-dots'
+);
+
+// Se a página não possui carrossel,
+// simplesmente não executa esta parte.
+// Isso NÃO interfere no modo claro.
+if (slides.length > 0 && carousel) {
+
+```
+let index =
+  slides.findIndex(slide =>
+    slide.classList.contains('active')
+  );
+
+
+// Se nenhuma imagem estiver marcada como ativa
 if (index < 0) {
-index = 0;
-slides[0].classList.add('active');
+
+  index = 0;
+
+  slides[0].classList.add(
+    'active'
+  );
+
 }
 
+
 const dots = [];
+
 let timer = null;
 
-// ==============================
+
+// ---------------------------------------------------------
 // CRIAÇÃO DAS BOLINHAS
-// ==============================
+// ---------------------------------------------------------
 
 if (dotsWrap) {
 
-```
-slides.forEach((_, i) => {
+  // Evita criar bolinhas duplicadas
+  dotsWrap.innerHTML = '';
 
-  const button = document.createElement('button');
+  slides.forEach((_, i) => {
 
-  button.className = 'carousel-dot';
-  button.type = 'button';
+    const button =
+      document.createElement('button');
 
-  button.setAttribute(
-    'aria-label',
-    isEnglish
-      ? `Go to slide ${i + 1}`
-      : `Ir para o slide ${i + 1}`
-  );
+    button.className =
+      'carousel-dot';
 
-  button.addEventListener('click', () => {
-    showSlide(i);
-    restartAutoPlay();
+    button.type = 'button';
+
+    button.setAttribute(
+      'aria-label',
+      isEnglish
+        ? `Go to slide ${i + 1}`
+        : `Ir para o slide ${i + 1}`
+    );
+
+
+    button.addEventListener(
+      'click',
+      () => {
+
+        showSlide(i);
+
+        restartAutoPlay();
+
+      }
+    );
+
+
+    dotsWrap.appendChild(button);
+
+    dots.push(button);
+
   });
-
-  dotsWrap.appendChild(button);
-  dots.push(button);
-
-});
-```
 
 }
 
-// ==============================
-// MOSTRAR UMA IMAGEM
-// ==============================
+
+// ---------------------------------------------------------
+// MOSTRAR SLIDE
+// ---------------------------------------------------------
 
 function showSlide(newIndex) {
 
-```
-slides[index].classList.remove('active');
-dots[index]?.classList.remove('active');
+  // Remove o slide atual
+  slides[index].classList.remove(
+    'active'
+  );
 
-index =
-  (newIndex + slides.length) %
-  slides.length;
+  dots[index]?.classList.remove(
+    'active'
+  );
 
-slides[index].classList.add('active');
-dots[index]?.classList.add('active');
-```
+
+  // Calcula o novo índice
+  index =
+    (newIndex + slides.length) %
+    slides.length;
+
+
+  // Ativa o novo slide
+  slides[index].classList.add(
+    'active'
+  );
+
+  dots[index]?.classList.add(
+    'active'
+  );
 
 }
 
-// ==============================
-// BOTÕES ANTERIOR E PRÓXIMO
-// ==============================
 
-window.changeSlide = function(direction) {
+// ---------------------------------------------------------
+// BOTÃO ANTERIOR / PRÓXIMO
+// ---------------------------------------------------------
 
-```
-showSlide(index + direction);
+window.changeSlide =
+  function(direction) {
 
-restartAutoPlay();
-```
+    showSlide(
+      index + direction
+    );
 
-};
+    restartAutoPlay();
 
-// ==============================
-// TROCA AUTOMÁTICA
-// ==============================
+  };
+
+
+// ---------------------------------------------------------
+// INICIAR CARROSSEL AUTOMÁTICO
+// ---------------------------------------------------------
 
 function startAutoPlay() {
 
-```
-if (timer !== null) return;
+  // Não cria vários timers ao mesmo tempo
+  if (timer !== null) return;
 
-timer = setInterval(() => {
-  showSlide(index + 1);
-}, 4500);
-```
+
+  timer = setInterval(
+    () => {
+
+      showSlide(
+        index + 1
+      );
+
+    },
+    4500
+  );
 
 }
+
+
+// ---------------------------------------------------------
+// PARAR CARROSSEL
+// ---------------------------------------------------------
 
 function stopAutoPlay() {
 
-```
-if (timer !== null) {
+  if (timer !== null) {
 
-  clearInterval(timer);
-  timer = null;
+    clearInterval(timer);
+
+    timer = null;
+
+  }
 
 }
-```
 
-}
+
+// ---------------------------------------------------------
+// REINICIAR CARROSSEL
+// ---------------------------------------------------------
 
 function restartAutoPlay() {
 
-```
-stopAutoPlay();
+  stopAutoPlay();
+
+  startAutoPlay();
+
+}
+
+
+// ---------------------------------------------------------
+// PAUSAR AO PASSAR O MOUSE
+// ---------------------------------------------------------
+
+carousel.addEventListener(
+  'mouseenter',
+  stopAutoPlay
+);
+
+carousel.addEventListener(
+  'mouseleave',
+  startAutoPlay
+);
+
+
+// ---------------------------------------------------------
+// INICIALIZAÇÃO
+// ---------------------------------------------------------
+
+dots[index]?.classList.add(
+  'active'
+);
+
 startAutoPlay();
 ```
 
 }
-
-// ==============================
-// PAUSAR AO PASSAR O MOUSE
-// ==============================
-
-carousel.addEventListener(
-'mouseenter',
-stopAutoPlay
-);
-
-carousel.addEventListener(
-'mouseleave',
-startAutoPlay
-);
-
-// ==============================
-// INICIALIZAÇÃO
-// ==============================
-
-dots[index]?.classList.add('active');
-
-startAutoPlay();
 
 })();
