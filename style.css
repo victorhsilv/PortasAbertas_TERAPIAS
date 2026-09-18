@@ -577,3 +577,26 @@ button[type="reset"] {
     transition: none !important;
   }
 }
+
+/* ================= EXIBIÇÃO EXCLUSIVA DE SEÇÕES VIA SUBMENU ================= */
+
+/* Quando qualquer uma das seções principais for ativada pelo menu */
+body:has(#professores:target) .creditos-secao:not(#professores),
+body:has(#desenvolvedores:target) .creditos-secao:not(#desenvolvedores) {
+  display: none; /* Esconde todas as outras seções */
+}
+
+/* Opcional: Esconde também o parágrafo de introdução quando focar em uma seção específica */
+body:has(:target) #introducao-creditos {
+  display: none;
+}
+
+/* Ajuste visual para a seção ativa não quebrar o layout */
+.creditos-secao:target {
+  animation: fadeIn 0.4s ease both;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
