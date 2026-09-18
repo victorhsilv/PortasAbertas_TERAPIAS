@@ -23,10 +23,11 @@
                 </ul>
             </li>
             <li><a href="bibliografia.html">Bibliografia</a></li>
-            <!-- Novo Sub-menu de Créditos com âncoras internas -->
+            <!-- Sub-menu de Créditos Ajustado -->
             <li class="dropdown">
-                <a href="creditos.html">Créditos</a>
+                <a href="#topo">Créditos</a>
                 <ul class="submenu">
+                    <li><a href="#topo">Ver Todos</a></li>
                     <li><a href="#professores">Orientadores</a></li>
                     <li><a href="#desenvolvedores">Desenvolvedores</a></li>
                 </ul>
@@ -41,41 +42,49 @@
         <div class="artigo">
             <h1>Créditos</h1>
             <hr/>
-            <h2>Créditos do Projeto</h2>
-            <p>Este site foi desenvolvido como produto final do projeto interdisciplinar <strong>“Portas Abertas”</strong> da ETEC de Hortolândia, reunindo pesquisa, produção textual, organização de conteúdo e desenvolvimento web.</p>
             
-            <!-- ID adicionado para a âncora do sub-menu -->
-            <h3 id="professores">Professores Orientadores</h3>
-            <ul>
-                <li>
-                    <strong>Profª Célia Aparecida Barufaldi</strong><br>
-                    Graduação em Tecnologia em Processamento de Dados<br>
-                    Especialista em Análise de Sistemas<br>
-                    Especialista em Redes e Segurança de Dados
-                </li>
-                <li>
-                    <strong>Profº Waldir Ferreira da Silva Júnior</strong><br>
-                    Graduação em Letras<br>
-                    Pós-graduação em Psicopedagogia<br>
-                    Mestrado em Educação
-                </li>
-            </ul>
+            <!-- SEÇÃO INTRODUÇÃO -->
+            <section id="introducao-creditos">
+                <h2>Créditos do Projeto</h2>
+                <p>Este site foi desenvolvido como produto final do projeto interdisciplinar <strong>“Portas Abertas”</strong> da ETEC de Hortolândia, reunindo pesquisa, produção textual, organização de conteúdo e desenvolvimento web.</p>
+            </section>
             
-            <!-- ID adicionado para a âncora do sub-menu -->
-            <h3 id="desenvolvedores">Desenvolvedores</h3>
-            <ul>
-                <li>Luis Henrique</li>
-                <li>Luis Flaubert</li>
-                <li>Victor Silva</li>
-                <li>Mateus Lima</li>
-            </ul>
+            <!-- SEÇÃO ORIENTADORES -->
+            <section id="professores" class="creditos-secao">
+                <h3>Professores Orientadores</h3>
+                <ul>
+                    <li>
+                        <strong>Profª Célia Aparecida Barufaldi</strong><br>
+                        Graduação em Tecnologia em Processamento de Dados<br>
+                        Especialista em Análise de Sistemas<br>
+                        Especialista em Redes e Segurança de Dados
+                    </li>
+                    <li>
+                        <strong>Profº Waldir Ferreira da Silva Júnior</strong><br>
+                        Graduação em Letras<br>
+                        Pós-graduação em Psicopedagogia<br>
+                        Mestrado em Educação
+                    </li>
+                </ul>
+            </section>
+            
+            <!-- SEÇÃO DESENVOLVEDORES -->
+            <section id="desenvolvedores" class="creditos-secao">
+                <h3>Desenvolvedores</h3>
+                <ul>
+                    <li>Luis Henrique</li>
+                    <li>Luis Flaubert</li>
+                    <li>Victor Silva</li>
+                    <li>Mateus Lima</li>
+                </ul>
+            </section>
         </div>
     </div>
 
     <div id="rodape">
         <p>ETEC DE HORTOLÂNDIA 2026 - © Todos os direitos reservados <br> Trabalho acadêmico sem fins lucrativos</p>
         <a aria-label="Voltar ao topo" href="#topo" id="ancora">
-            <svg fill="#1f1f1f" height="24px" viewbox="0 -960 960 960" width="24px" xmlns="http://www.w3.org/2000/svg">
+            <svg fill="#1f1f1f" height="24px" viewbox="0 -960 960 960" width="24px" xmlns="http://w3.org">
                 <path d="M440-240v-368L296-464l-56-56 240-240 240 240-56 56-144-144v368h-80Z"></path>
             </svg>
         </a>
