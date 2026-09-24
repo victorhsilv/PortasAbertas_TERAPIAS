@@ -1,105 +1,76 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1" name="viewport"/>
-<title>Innovative Forms of Therapy</title>
-<link rel="icon" href="ty.png" type="image/png">
-<link href="style.css" rel="stylesheet"/>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1" name="viewport"/>
+    <title>Innovative Forms of Therapy</title>
+    <link rel="icon" href="ty.png" type="image/png">
+    <link href="style.css" rel="stylesheet"/>
 </head>
-
 <body id="topo">
 
-<div id="header">
-<h1>ALTERNATIVE THERAPIES</h1>
+    <div id="header">
+        <h1>ALTERNATIVE THERAPIES</h1>
+        <ul id="nav">
+            <li><a href="index_en.html">Home</a></li>
+            <li><a href="sobre_en.html">About</a></li>
+            <li class="dropdown">
+                <a href="terapia_en.html">Therapies</a>
+                <ul class="submenu">
+                    <li><a href="musicaterapia_en.html">Music Therapy</a></li>
+                    <li><a href="pnl_en.html">NLP</a></li>
+                    <li><a href="radiestesia_en.html">Dowsing</a></li>
+                </ul>
+            </li>
+            <li><a href="bibliografia_en.html">Bibliography</a></li>
+            <li><a href="creditos_en.html">Credits</a></li>
+            <li><a href="contato_en.html">Contact</a></li>
+            <li class="theme-item">
+                <button class="theme-toggle" type="button">☀️ Light mode</button>
+            </li>
+            <li class="language-item">
+                <a class="lang-switch" href="index.html" title="Open Portuguese version">🇺🇸 → 🇧🇷 PT-BR</a>
+            </li>
+        </ul>
+    </div>
 
-<ul id="nav">
+    <div id="conteudo">
+        <div class="artigo">
+            <h2>Welcome to the Alternative Therapies Portal</h2>
+            <p>Learn more about Music Therapy, Neuro-Linguistic Programming (NLP), and Radiesthesia, complementary practices related to well-being, communication, and holistic care.</p>
 
-<li><a href="index_en.html">Home</a></li>
+            <div aria-label="Featured content carousel" class="carousel-container">
+                <div class="carousel-slide active">
+                    <img alt="Music Therapy" src="musicoterapia.svg"/>
+                    <div class="carousel-caption">Music Therapy</div>
+                </div>
+                <div class="carousel-slide">
+                    <img alt="NLP" src="pnl.svg"/>
+                    <div class="carousel-caption">NLP</div>
+                </div>
+                <div class="carousel-slide">
+                    <img alt="Dowsing" src="radiestesia.svg"/>
+                    <div class="carousel-caption">Dowsing</div>
+                </div>
 
-<li><a href="sobre_en.html">About</a></li>
+                <button aria-label="Previous" class="carousel-btn prev" onclick="changeSlide(-1)" type="button">❮</button>
+                <button aria-label="Next" class="carousel-btn next" onclick="changeSlide(1)" type="button">❯</button>
+                <div aria-hidden="false" class="carousel-dots"></div>
+            </div>
+        </div>
+    </div>
 
-<li class="dropdown">
-<a href="terapia_en.html">Therapies</a>
-<ul class="submenu">
-<li><a href="musicaterapia_en.html">Music Therapy</a></li>
-<li><a href="pnl_en.html">NLP</a></li>
-<li><a href="radiestesia_en.html">Dowsing</a></li>
-</ul>
-</li>
+    <div id="rodape">
+        <p>ETEC DE HORTOLÂNDIA 2026 - © All rights reserved <br> Non-profit academic work</p>
+        <a aria-label="Back to top" href="#topo" id="ancora">
+            <!-- Corrigido link quebrado do namespace xmlns do SVG original -->
+            <svg fill="#1f1f1f" height="24px" viewBox="0 -960 960 960" width="24px" xmlns="http://www.w3.org/2000/svg">
+                <path d="M440-240v-368L296-464l-56-56 240-240 240 240-56 56-144-144v368h-80Z"></path>
+            </svg>
+        </a>
+    </div>
 
-<li><a href="bibliografia_en.html">Bibliography</a></li>
-
-<li><a href="creditos_en.html">Credits</a></li>
-
-<li><a href="contato_en.html">Contact</a></li>
-
-<li class="theme-item">
-<button class="theme-toggle" type="button">☀️ Light mode</button>
-</li>
-
-<li class="language-item">
-<a class="lang-switch" href="index.html" title="Open Portuguese version">🇺🇸 → 🇧🇷 PT-BR</a>
-</li>
-
-</ul>
-</div>
-
-<div id="conteudo">
-
-<div class="artigo">
-
-<h2>Welcome to the Alternative Therapies Portal</h2>
-
-<p>
-Learn more about Music Therapy, Neuro-Linguistic Programming (NLP), and Radiesthesia, complementary practices related to well-being, communication, and holistic care.
-</p>
-
-<div aria-label="Featured content carousel" class="carousel-container">
-
-<div class="carousel-slide active">
-<img alt="Music Therapy" src="musicoterapia.svg"/>
-<div class="carousel-caption">Music Therapy</div>
-</div>
-
-<div class="carousel-slide">
-<img alt="NLP" src="pnl.svg"/>
-<div class="carousel-caption">NLP</div>
-</div>
-
-<div class="carousel-slide">
-<img alt="Dowsing" src="radiestesia.svg"/>
-<div class="carousel-caption">Dowsing</div>
-</div>
-
-<button aria-label="Previous" class="carousel-btn prev" onclick="changeSlide(-1)" type="button">❮</button>
-
-<button aria-label="Next" class="carousel-btn next" onclick="changeSlide(1)" type="button">❯</button>
-
-<div aria-hidden="false" class="carousel-dots"></div>
-
-</div>
-
-
-</div>
-
-<div id="rodape">
-
-<p>ETEC DE HORTOLÂNDIA 2026 - © All rights reserved <br> Non-profit academic work</p>
-
-<a aria-label="Back to top" href="#topo" id="ancora">
-
-<svg fill="#1f1f1f" height="24px" viewBox="0 -960 960 960" width="24px" xmlns="http://w3.org">
-<path d="M440-240v-368L296-464l-56-56 240-240 240 240-56 56-144-144v368h-80Z"></path>
-</svg>
-
-</a>
-
-</div>
-
-<!-- O script que estava faltando para fazer o carrossel e o tema funcionarem -->
-<script src="site.js"></script>
-
+    <!-- O script que estava faltando para fazer o carrossel e o tema funcionarem -->
+    <script src="site.js"></script>
 </body>
 </html>
