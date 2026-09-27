@@ -215,12 +215,10 @@ body {
 /* ================= IMAGENS NO CELULAR ================= */
 
 @media (max-width: 700px) {
-
   .artigo img {
     width: 100%;
     max-width: 100%;
     margin: 25px auto;
     border-radius: 10px;
   }
-
 }
