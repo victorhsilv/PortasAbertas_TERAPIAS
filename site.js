@@ -3,14 +3,16 @@
   const toggle = document.querySelector('.theme-toggle');
   const isEnglish = document.documentElement.lang.toLowerCase().startsWith('en');
 
-  // ==============================
-  // MODO CLARO E MODO ESCURO
-  // ==============================
-  const saved = localStorage.getItem('site-theme');
-  const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+  // =========================================================
+  // MODO CLARO / MODO ESCURO
+  // =========================================================
 
-  // Aplica o tema correto ao carregar
-  if (saved === 'light' || (!saved && prefersLight)) {
+  const savedTheme = localStorage.getItem('site-theme');
+  const prefersLight =
+    window.matchMedia &&
+    window.matchMedia('(prefers-color-scheme: light)').matches;
+
+  if (savedTheme === 'light' || (!savedTheme && prefersLight)) {
     body.classList.add('light-mode');
   } else {
     body.classList.remove('light-mode');
@@ -18,101 +20,269 @@
 
   function updateThemeButton() {
     if (!toggle) return;
-    const light = body.classList.contains('light-mode');
+
+    const isLight = body.classList.contains('light-mode');
+
     if (isEnglish) {
-      toggle.innerHTML = light ? '🌙 <span>Dark mode</span>' : '☀️ <span>Light mode</span>';
-      toggle.setAttribute('aria-label', light ? 'Enable dark mode' : 'Enable light mode');
+      toggle.innerHTML = isLight
+        ? '🌙 <span>Dark mode</span>'
+        : '☀️ <span>Light mode</span>';
+
+      toggle.setAttribute(
+        'aria-label',
+        isLight ? 'Enable dark mode' : 'Enable light mode'
+      );
     } else {
-      toggle.innerHTML = light ? '🌙 <span>Modo escuro</span>' : '☀️ <span>Modo claro</span>';
-      toggle.setAttribute('aria-label', light ? 'Ativar modo escuro' : 'Ativar modo claro');
+      toggle.innerHTML = isLight
+        ? '🌙 <span>Modo escuro</span>'
+        : '☀️ <span>Modo claro</span>';
+
+      toggle.setAttribute(
+        'aria-label',
+        isLight ? 'Ativar modo escuro' : 'Ativar modo claro'
+      );
     }
   }
 
-  // Inicializa o texto/ícone do botão
   updateThemeButton();
 
-  toggle?.addEventListener('click', () => {
-    body.classList.toggle('light-mode');
-    localStorage.setItem('site-theme', body.classList.contains('light-mode') ? 'light' : 'dark');
-    updateThemeButton();
-  });
+  if (toggle) {
+    toggle.addEventListener('click', () => {
+      body.classList.toggle('light-mode');
 
-  // ==============================
-  // CARROSSEL DE IMAGENS
-  // ==============================
-  const slides = Array.from(document.querySelectorAll('.carousel-slide'));
-  const carousel = document.querySelector('.carousel-container');
-  const dotsWrap = document.querySelector('.carousel-dots');
+      const newTheme = body.classList.contains('light-mode')
+        ? 'light'
+        : 'dark';
 
-  // Se a página não tiver carrossel, encerra APENAS a execução do carrossel safely.
-  if (!slides.length || !carousel) return;
+      localStorage.setItem('site-theme', newTheme);
 
-  let index = slides.findIndex(slide => slide.classList.contains('active'));
-  if (index < 0) {
-    index = 0;
-    slides[0].classList.add('active');
-  }
-
-  const dots = [];
-  let timer = null;
-
-  // Criação das bolinhas
-  if (dotsWrap) {
-    slides.forEach((_, i) => {
-      const button = document.createElement('button');
-      button.className = 'carousel-dot';
-      button.type = 'button';
-      button.setAttribute('aria-label', isEnglish ? `Go to slide ${i + 1}` : `Ir para o slide ${i + 1}`);
-      button.addEventListener('click', () => {
-        showSlide(i);
-        restartAutoPlay();
-      });
-      dotsWrap.appendChild(button);
-      dots.push(button);
+      updateThemeButton();
     });
   }
 
-  // Mostrar uma imagem
-  function showSlide(newIndex) {
-    slides[index].classList.remove('active');
-    dots[index]?.classList.remove('active');
-    index = (newIndex + slides.length) % slides.length;
-    slides[index].classList.add('active');
-    dots[index]?.classList.add('active');
-  }
+  // =========================================================
+  // CARROSSEL
+  // =========================================================
 
-  // Botões Anterior e Próximo
-  window.changeSlide = function(direction) {
-    showSlide(index + direction);
-    restartAutoPlay();
-  };
+  const slides = Array.from(
+    document.querySelectorAll('.carousel-slide')
+  );
 
-  // Troca automática
-  function startAutoPlay() {
-    if (timer !== null) return;
-    timer = setInterval(() => {
-      showSlide(index + 1);
-    }, 4500);
-  }
+  const carousel = document.querySelector(
+    '.carousel-container'
+  );
 
-  function stopAutoPlay() {
-    if (timer !== null) {
-      clearInterval(timer);
-      timer = null;
+  const dotsWrap = document.querySelector(
+    '.carousel-dots'
+  );
+
+  // A página pode não ter carrossel.
+  // Nesse caso, simplesmente não executamos esta parte.
+  if (slides.length > 0 && carousel) {
+
+    let index = slides.findIndex(
+      slide => slide.classList.contains('active')
+    );
+
+    if (index < 0) {
+      index = 0;
+      slides[0].classList.add('active');
     }
-  }
 
-  function restartAutoPlay() {
-    stopAutoPlay();
+    const dots = [];
+    let timer = null;
+
+    // ---------------------------------------------------------
+    // Criação das bolinhas
+    // ---------------------------------------------------------
+
+    if (dotsWrap) {
+
+      // Evita duplicar bolinhas caso o script seja carregado
+      // mais de uma vez.
+      dotsWrap.innerHTML = '';
+
+      slides.forEach((_, i) => {
+
+        const button = document.createElement('button');
+
+        button.type = 'button';
+        button.className = 'carousel-dot';
+
+        button.setAttribute(
+          'aria-label',
+          isEnglish
+            ? `Go to slide ${i + 1}`
+            : `Ir para o slide ${i + 1}`
+        );
+
+        button.addEventListener('click', () => {
+          showSlide(i);
+          restartAutoPlay();
+        });
+
+        dotsWrap.appendChild(button);
+        dots.push(button);
+      });
+    }
+
+    // ---------------------------------------------------------
+    // Mostrar slide
+    // ---------------------------------------------------------
+
+    function showSlide(newIndex) {
+
+      if (!slides.length) return;
+
+      slides[index].classList.remove('active');
+
+      if (dots[index]) {
+        dots[index].classList.remove('active');
+      }
+
+      index =
+        (newIndex + slides.length) %
+        slides.length;
+
+      slides[index].classList.add('active');
+
+      if (dots[index]) {
+        dots[index].classList.add('active');
+      }
+    }
+
+    // ---------------------------------------------------------
+    // Botões anterior / próximo
+    // ---------------------------------------------------------
+
+    window.changeSlide = function(direction) {
+
+      showSlide(index + direction);
+
+      restartAutoPlay();
+    };
+
+    // ---------------------------------------------------------
+    // Reprodução automática
+    // ---------------------------------------------------------
+
+    function startAutoPlay() {
+
+      if (timer !== null || slides.length <= 1) {
+        return;
+      }
+
+      timer = setInterval(() => {
+
+        showSlide(index + 1);
+
+      }, 4500);
+    }
+
+    function stopAutoPlay() {
+
+      if (timer !== null) {
+
+        clearInterval(timer);
+
+        timer = null;
+      }
+    }
+
+    function restartAutoPlay() {
+
+      stopAutoPlay();
+
+      startAutoPlay();
+    }
+
+    // ---------------------------------------------------------
+    // Pausar quando passar o mouse
+    // ---------------------------------------------------------
+
+    carousel.addEventListener(
+      'mouseenter',
+      stopAutoPlay
+    );
+
+    carousel.addEventListener(
+      'mouseleave',
+      startAutoPlay
+    );
+
+    // ---------------------------------------------------------
+    // Inicialização
+    // ---------------------------------------------------------
+
+    if (dots[index]) {
+      dots[index].classList.add('active');
+    }
+
+    // Garante que apenas o slide atual fique visível
+    slides.forEach((slide, i) => {
+
+      slide.classList.toggle(
+        'active',
+        i === index
+      );
+
+    });
+
     startAutoPlay();
   }
 
-  // Pausar ao passar o mouse
-  carousel.addEventListener('mouseenter', stopAutoPlay);
-  carousel.addEventListener('mouseleave', startAutoPlay);
+  // =========================================================
+  // MENU / SUBMENUS
+  // =========================================================
 
-  // Inicialização do Carrossel
-  dots[index]?.classList.add('active');
-  startAutoPlay();
+  const dropdowns = document.querySelectorAll('.dropdown');
+
+  dropdowns.forEach(dropdown => {
+
+    const button = dropdown.querySelector(
+      ':scope > button'
+    );
+
+    const submenu = dropdown.querySelector(
+      ':scope > .submenu'
+    );
+
+    if (!button || !submenu) return;
+
+    button.addEventListener('click', event => {
+
+      event.preventDefault();
+
+      const isOpen =
+        dropdown.classList.contains('open');
+
+      // Fecha outros menus
+      dropdowns.forEach(other => {
+
+        if (other !== dropdown) {
+          other.classList.remove('open');
+        }
+
+      });
+
+      dropdown.classList.toggle(
+        'open',
+        !isOpen
+      );
+    });
+  });
+
+  // Fecha submenu ao clicar fora
+  document.addEventListener('click', event => {
+
+    if (!event.target.closest('.dropdown')) {
+
+      dropdowns.forEach(dropdown => {
+        dropdown.classList.remove('open');
+      });
+
+    }
+
+  });
+
 })();
-
