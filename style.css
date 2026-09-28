@@ -579,28 +579,183 @@ button[type="reset"] {
 }
 
 /* ==========================================================================
-   MÁGICA DO SUBMENU "ORIENTADORES" EXCLUSIVO SEM JAVASCRIPT
+   SUBMENU DE CRÉDITOS — MOSTRAR APENAS A SEÇÃO ESCOLHIDA
    ========================================================================== */
 
-/* 1. Por padrão, a seção de orientadores começa totalmente escondida */
-#orientadores {
+/* Orientadores */
+#conteudo:has(#professores:target) #introducao-creditos,
+#conteudo:has(#professores:target) #desenvolvedores {
   display: none;
 }
 
-/* 2. Se a seção #orientadores for o alvo (:target) ativo na URL:
-      Esconde a página principal da Home instantaneamente */
-#conteudo:has(#orientadores:target) #home-principal {
+#professores:target {
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+/* Desenvolvedores */
+#conteudo:has(#desenvolvedores:target) #introducao-creditos,
+#conteudo:has(#desenvolvedores:target) #professores {
   display: none;
 }
 
-/* 3. Mostra exclusivamente a seção de orientadores quando ela for clicada */
-#orientadores:target {
-  display: block !important;
-  animation: fadeIn 0.4s ease-in-out; /* Efeito visual suave de surgimento */
+#desenvolvedores:target {
+  animation: fadeIn 0.4s ease-in-out;
 }
 
-/* Animação simples para suavizar a transição de conteúdo */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+/* ==========================================================================
+   IMAGENS DAS PÁGINAS DE TERAPIA
+   ========================================================================== */
+
+/* Afeta somente imagens diretamente dentro de .artigo.
+   NÃO afeta as imagens do carrossel. */
+.artigo > img {
+  display: block;
+  width: min(100%, 760px);
+  height: auto;
+  max-height: 520px;
+  object-fit: contain;
+  margin: 28px auto;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
+
+/* ==========================================================================
+   RESPONSIVIDADE EXTRA
+   ========================================================================== */
+
+@media (max-width: 900px) {
+
+  #header {
+    padding: 18px 4%;
+  }
+
+  #nav {
+    gap: 7px;
+  }
+
+  #nav a,
+  #nav button {
+    padding: 9px 12px;
+    font-size: 0.95rem;
+  }
+
+  #conteudo {
+    width: 94%;
+    margin: 28px auto;
+  }
+
+  .artigo {
+    padding: 28px;
+  }
+}
+
+
+@media (max-width: 600px) {
+
+  body {
+    font-size: 16px;
+    line-height: 1.65;
+  }
+
+  #header {
+    padding: 15px 3%;
+  }
+
+  #header h1 {
+    font-size: 1.55rem;
+    letter-spacing: 0.05em;
+    margin-bottom: 13px;
+  }
+
+  #nav {
+    width: 100%;
+    gap: 6px;
+  }
+
+  #nav a,
+  #nav button {
+    min-height: 42px;
+    padding: 8px 10px;
+    font-size: 0.88rem;
+  }
+
+  #conteudo {
+    width: 94%;
+    margin: 20px auto;
+  }
+
+  .artigo {
+    padding: 20px 17px;
+    border-radius: 15px;
+  }
+
+  .artigo h2 {
+    font-size: 1.7rem;
+  }
+
+  .artigo h3 {
+    font-size: 1.35rem;
+  }
+
+  .artigo h4 {
+    font-size: 1.1rem;
+  }
+
+  .artigo p,
+  .artigo li {
+    font-size: 1rem;
+  }
+
+  /* Imagens das terapias em telas pequenas */
+  .artigo > img {
+    width: 100%;
+    max-height: 380px;
+    margin: 22px auto;
+  }
+
+  .grade-info {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .card {
+    padding: 18px;
+  }
+}
+
+
+@media (max-width: 400px) {
+
+  #header h1 {
+    font-size: 1.35rem;
+  }
+
+  #nav a,
+  #nav button {
+    padding: 7px 8px;
+    font-size: 0.82rem;
+  }
+
+  .artigo {
+    padding: 17px 14px;
+  }
+
+  .artigo > img {
+    max-height: 300px;
+  }
 }
